@@ -20,7 +20,6 @@ namespace OCTOBER.Server.Controllers.UD
 {
     [Route("api/[controller]")]
     [ApiController]
-
     public class CourseController : BaseController, GenericRestController<CourseDTO>
     {
         public CourseController(OCTOBEROracleContext context,
@@ -29,8 +28,6 @@ namespace OCTOBER.Server.Controllers.UD
         : base(context, httpContextAccessor)
         {
         }
-
-
         [HttpGet]
         [Route("Get/{SchoolID}/{CourseNo}")]
         //  Route for this is....  <URL>/api/Course/Get/10
@@ -56,7 +53,6 @@ namespace OCTOBER.Server.Controllers.UD
                          Prerequisite = sp.Prerequisite
                      })
                 .SingleOrDefaultAsync();
-
                 await _context.Database.RollbackTransactionAsync();
                 return Ok(result);
             }
@@ -67,7 +63,6 @@ namespace OCTOBER.Server.Controllers.UD
                 return StatusCode(StatusCodes.Status417ExpectationFailed, "An Error has occurred");
             }
         }
-
         [HttpGet]
         [Route("Get")]
         public async Task<IActionResult> Get()
@@ -98,8 +93,6 @@ namespace OCTOBER.Server.Controllers.UD
                 return StatusCode(StatusCodes.Status417ExpectationFailed, "An Error has occurred");
             }
         }
-
-
         [HttpPost]
         [Route("Post")]
         public async Task<IActionResult> Post([FromBody]
@@ -108,9 +101,7 @@ namespace OCTOBER.Server.Controllers.UD
             try
             {
                 await _context.Database.BeginTransactionAsync();
-
                 var itm = await _context.Courses.Where(x => x.CourseNo == _CourseDTO.CourseNo).FirstOrDefaultAsync();
-
                 if (itm == null)
                 {
                     Course c = new Course
@@ -133,30 +124,22 @@ namespace OCTOBER.Server.Controllers.UD
                 return StatusCode(StatusCodes.Status417ExpectationFailed, "An Error has occurred");
             }
         }
-
-
         [HttpPut]
         [Route("Put")]
         public async Task<IActionResult> Put([FromBody]
                                                 CourseDTO _CourseDTO)
         {
-
             Debugger.Launch();
-
             try
             {
                 await _context.Database.BeginTransactionAsync();
-
                 var itm = await _context.Courses.Where(x => x.CourseNo == _CourseDTO.CourseNo).FirstOrDefaultAsync();
-
                 itm.Description = _CourseDTO.Description;
                 itm.Cost = _CourseDTO.Cost;
                 itm.Prerequisite = _CourseDTO.Prerequisite;
-
                 _context.Courses.Update(itm);
                 await _context.SaveChangesAsync();
                 await _context.Database.CommitTransactionAsync();
-
                 return Ok();
             }
             catch (Exception Dex)
@@ -166,15 +149,11 @@ namespace OCTOBER.Server.Controllers.UD
                 return StatusCode(StatusCodes.Status417ExpectationFailed, "An Error has occurred");
             }
         }
-
-
         [HttpDelete]
         [Route("Delete/{CourseNo}")]
         public async Task<IActionResult> Delete(int CourseNo)
         {
-
             Debugger.Launch();
-
             try
             {
                 await _context.Database.BeginTransactionAsync();
@@ -187,7 +166,6 @@ namespace OCTOBER.Server.Controllers.UD
                 }
                 await _context.SaveChangesAsync();
                 await _context.Database.CommitTransactionAsync();
-
                 return Ok();
             }
             catch (Exception Dex)
@@ -197,7 +175,6 @@ namespace OCTOBER.Server.Controllers.UD
                 return StatusCode(StatusCodes.Status417ExpectationFailed, "An Error has occurred");
             }
         }
-
         public Task<IActionResult> Get(int KeyVal)
         {
             throw new NotImplementedException();
